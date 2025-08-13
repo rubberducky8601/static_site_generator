@@ -22,9 +22,13 @@ def generate_page_r(dir_path_content, template_path, dest_dir_path):
                 md_content = md_file.read()
             html_content = markdown_to_html_node(md_content).to_html()
             html_title = extract_title(md_content)
-            page = template_content.replace("{{ Title }}", html_title).replace(
-                "{{ Content }}", html_content
+            page = (
+                template_content.replace("{{ Title }}", html_title)
+                .replace("{{ Content }}", html_content)
+                .replace('href="/', f'href="{dir_path_content}')
+                .replace('src="/', f'src="{dir_path_content}')
             )
+
             out_path = os.path.splitext(dst_path)[0] + ".html"
             os.makedirs(os.path.dirname(out_path), exist_ok=True)
             with open(out_path, "w", encoding="utf-8") as output_file:
